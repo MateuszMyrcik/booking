@@ -1,3 +1,5 @@
+import { SiteRoutes } from "../utils/goto";
+
 export interface INavigationItem {
   url: string;
   label: string;
@@ -5,11 +7,19 @@ export interface INavigationItem {
 
 export const NavigationItems: INavigationItem[] = [
   {
-    url: "/",
+    url: SiteRoutes.HOMEPAGE,
     label: "Homepage",
   },
+  // {
+  //   url: SiteRoutes.CONTACT,
+  //   label: "Contact",
+  // },
   {
-    url: "/contact",
-    label: "Contact",
+    url: SiteRoutes.ADMIN_PANEL,
+    label: "Admin Panel",
+  },
+  {
+    url: SiteRoutes.RECEPTIONIST_PANEL,
+    label: "Receptionist Panel",
   },
 ];

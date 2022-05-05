@@ -1,0 +1,14 @@
+User journey uzytkownika:
+
+Layout elementy:
+-> nawigacja (zarejestruj / zaloguj) / rezerwacja pokoii / gastronomia / dla dzieci / konferencje
+
+Uzytkownik wchodzi na strone startowa, owa strona posiada:
+-> slider prexentujacy wyglad hotelu -> z przyciskiej pokaz wiecej panel z informacjami (bazuj na lorem ipsum)
+-> kilka przykladowych pokoii (fotki z mini opisem)
+-> 
+
+Strona rezerwacji:
+-> uzytkownik formularz rezerwacyjny 
+    ->  mozliwosc wyboru zakresu dat
+    ->  ilosci ludzi

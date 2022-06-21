@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ButtonComponent } from "../ui/button";
 import { MasterLayoutComponent } from "../ui/master-layout";
 import { GoTo, SiteRoutes } from "../utils/goto";
@@ -10,6 +10,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 
 const Home: NextPage = () => {
   const { appDispatch, appState } = useContext(AppContext);
+  let [movies, setMovies] = useState([]);
 
   const [state, setState] = useState([
     {
@@ -18,6 +19,17 @@ const Home: NextPage = () => {
       key: "selection",
     },
   ]);
+
+  useEffect(() => {
+    fetch("/api/movies")
+      .then((res) => res.json())
+      .then((json) => {
+        setMovies(json.movies);
+      });
+  }, []);
+
+  console.log(movies);
+
   return (
     <MasterLayoutComponent>
       <section className="overflow-hidden text-white lg:grid bg-gradient-to-r from-blue-600 to-purple-700 lg:grid-cols-2 lg:items-center">
@@ -49,7 +61,7 @@ const Home: NextPage = () => {
         </div>
       </section>
       <section className="pt-12 ">
-        <form className="flex w-full justify-center flex-wrap">
+        {/* <form className="flex w-full justify-center flex-wrap">
           <div>
             <input
               className="w-full py-3 pl-3 pr-12 text-sm border-2 border-gray-200 rounded"
@@ -75,15 +87,13 @@ const Home: NextPage = () => {
             ></input>
             <label htmlFor="people_number"></label>
           </div>
-          {/* <button className="px-5 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-300" onClick={(event) => {
-            event.preventDefault()
-            GoTo(SiteRoutes.SEARCH_RESULTS)
-          }}></button> */}
+        </form> */}
+        <div className="flex w-full justify-center flex-wrap">
           <ButtonComponent
-            label="Wyszukaj"
+            label="Find your room"
             btnClickEvent={GoTo(SiteRoutes.SEARCH_RESULTS)}
           />
-        </form>
+        </div>
       </section>
     </MasterLayoutComponent>
   );

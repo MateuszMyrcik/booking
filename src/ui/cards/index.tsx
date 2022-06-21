@@ -1,9 +1,15 @@
-export const CardsComponent = () => {
+import { IRoomData } from "../../api/booking-service/types";
+
+interface ICardsComponent {
+  room: IRoomData;
+}
+
+export const CardsComponent: React.FC<ICardsComponent> = ({ room }) => {
   return (
     <a href="" className="block p-4 rounded-lg shadow-sm shadow-indigo-100">
       <img
         alt="123 Wallaby Avenue, Park Road"
-        src="https://images.unsplash.com/photo-1554995207-c18c203602cb"
+        src={room.images[1].uri}
         className="object-cover w-full h-56 rounded-md"
       />
 
@@ -12,13 +18,15 @@ export const CardsComponent = () => {
           <div>
             <dt className="sr-only">Price</dt>
 
-            <dd className="text-sm text-gray-500">$240,000</dd>
+            <dd className="text-sm text-gray-500">
+              {room.pricePerNight.value}$
+            </dd>
           </div>
 
           <div>
-            <dt className="sr-only">Address</dt>
+            <dt className="sr-only">Description</dt>
 
-            <dd className="font-medium">123 Wallaby Avenue, Park Road</dd>
+            <dd className="font-medium">{room.description}</dd>
           </div>
         </dl>
 
@@ -40,9 +48,9 @@ export const CardsComponent = () => {
             </svg>
 
             <div className="sm:ml-3 mt-1.5 sm:mt-0">
-              <dt className="text-gray-500">Parking</dt>
+              <dt className="text-gray-500">Room version</dt>
 
-              <dd className="font-medium">2 spaces</dd>
+              <dd className="font-medium">{room.roomType}</dd>
             </div>
           </div>
 
@@ -63,9 +71,9 @@ export const CardsComponent = () => {
             </svg>
 
             <div className="sm:ml-3 mt-1.5 sm:mt-0">
-              <dt className="text-gray-500">Bathroom</dt>
+              <dt className="text-gray-500">Bathroom type</dt>
 
-              <dd className="font-medium">2 rooms</dd>
+              <dd className="font-medium capitalize">{room.bathroomType}</dd>
             </div>
           </div>
 
@@ -86,9 +94,12 @@ export const CardsComponent = () => {
             </svg>
 
             <div className="sm:ml-3 mt-1.5 sm:mt-0">
-              <dt className="text-gray-500">Bedroom</dt>
+              <dt className="text-gray-500">Room size</dt>
 
-              <dd className="font-medium">4 rooms</dd>
+              <dd className="font-medium">
+                {room.roomSize.value}
+                {room.roomSize.unit}
+              </dd>
             </div>
           </div>
         </dl>

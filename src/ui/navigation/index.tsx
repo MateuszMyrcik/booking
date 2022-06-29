@@ -36,7 +36,7 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
               ))}
             </nav>
 
-            {appState.isUserLogged ? (
+            {appState.user ? (
               <div className="flex items-center justify-between flex-1 gap-8 sm:justify-end">
                 <button
                   type="button"
@@ -44,23 +44,23 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
                 >
                   <img
                     className="object-cover w-10 h-10 rounded-full"
-                    src="https://www.hyperui.dev/photos/man-4.jpeg"
+                    src={appState.user.photo}
                     alt="Simon Lewis"
                   />
 
                   <p className="hidden ml-2 text-xs text-left sm:block">
-                    <strong className="block font-medium">Simon Lewis</strong>
+                    <strong className="block font-medium">
+                      {appState.user.username}
+                    </strong>
 
-                    <span className="text-gray-500">
-                      simonlewis@fakemail.com{" "}
-                    </span>
+                    <span className="text-gray-500">{appState.user.email}</span>
                   </p>
                 </button>
                 <div className="flex gap-4">
                   <button
                     onClick={() => {
                       appDispatch({
-                        type: AppActionType.CHANGE_USER,
+                        type: AppActionType.SET_USER,
                         payload: false,
                       });
                     }}

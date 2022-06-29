@@ -17,10 +17,7 @@ export interface IAppContext {
 export const AppContext = React.createContext({} as IAppContext);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const initialState = {
-    isUserLogged: false,
-    isAdmin: true,
-  };
+  const initialState = {};
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
   return (

@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormEvent, useContext } from "react";
 import { fetchData } from "../../api/booking-service";
+import { IUserData } from "../../api/booking-service/types";
 import { AppActionType, AppReducer } from "../../state/reducers";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { GoTo, SiteRoutes } from "../../utils/goto";
@@ -14,7 +15,7 @@ const Login: NextPage = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    appDispatch({ type: AppActionType.CHANGE_USER, payload: true });
+    appDispatch({ type: AppActionType.SET_USER, payload: true });
 
     const username = e.target.username.value as string;
     const password = e.target.password.value as string;
@@ -26,11 +27,25 @@ const Login: NextPage = () => {
       "POST"
     );
 
-    console.log(authToken);
+    const user = await fetchData("/users/admin");
+    const data = user.data as IUserData;
 
-    e.target.username.value = "";
-    e.target.password.value = "";
-    // router.push(SiteRoutes.HOMEPAGE);
+    if (authToken) {
+      appDispatch({
+        type: AppActionType.SET_USER,
+        payload: {
+          email: data.email,
+          username: data.username,
+          photo: data.photoURI,
+          name: data.name,
+          surname: data.surname,
+          dateOfBirth: data.dateOfBirth,
+          phoneNumber: data.phoneNumber,
+        },
+      });
+      router.push(SiteRoutes.HOMEPAGE);
+    }
+
     // TODO: connect with DATA
   };
 
@@ -118,6 +133,7 @@ const Login: NextPage = () => {
             <p className="text-sm text-center text-gray-500">
               No account?
               <button
+                type="reset"
                 className="underline"
                 onClick={GoTo(SiteRoutes.REGISTRATION)}
               >

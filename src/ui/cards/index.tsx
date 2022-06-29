@@ -1,4 +1,6 @@
 import { IRoomData } from "../../api/booking-service/types";
+import { GoTo, SiteRoutes } from "../../utils/goto";
+import { ButtonComponent } from "../button";
 
 interface ICardsComponent {
   room: IRoomData;
@@ -6,7 +8,7 @@ interface ICardsComponent {
 
 export const CardsComponent: React.FC<ICardsComponent> = ({ room }) => {
   return (
-    <a href="" className="block p-4 rounded-lg shadow-sm shadow-indigo-100">
+    <div className="block p-4 rounded-lg shadow-sm shadow-indigo-100">
       <img
         alt="123 Wallaby Avenue, Park Road"
         src={room.images[1].uri}
@@ -102,8 +104,14 @@ export const CardsComponent: React.FC<ICardsComponent> = ({ room }) => {
               </dd>
             </div>
           </div>
+          <div className="sm:inline-flex sm:items-center sm:shrink-1">
+            <ButtonComponent
+              btnClickEvent={GoTo(SiteRoutes.CHECKOUT, `/${room.roomNo}`)}
+              label={"Reserve"}
+            />
+          </div>
         </dl>
       </div>
-    </a>
+    </div>
   );
 };

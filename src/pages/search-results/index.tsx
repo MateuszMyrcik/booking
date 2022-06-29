@@ -74,8 +74,8 @@ const SearchResults: NextPage = () => {
 
   useEffect(() => {
     const getRooms = async () => {
-      const rooms = { data: [] };
-      // const rooms = await fetchData("/rooms");
+      // const rooms = { data: [] };
+      const rooms = await fetchData("/rooms");
       setRooms(rooms.data);
     };
 

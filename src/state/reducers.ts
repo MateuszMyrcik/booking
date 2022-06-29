@@ -1,5 +1,5 @@
 export enum AppActionType {
-  CHANGE_USER = "CHANGE_USER",
+  SET_USER = "SET_USER",
 }
 export interface IAction {
   type: AppActionType;
@@ -8,22 +8,30 @@ export interface IAction {
 }
 
 export interface IState {
-  isUserLogged: boolean;
+  user?: {
+    email: string;
+    username: string;
+    photo: string;
+    name: string;
+    surname: string;
+    dateOfBirth: string;
+    phoneNumber: string;
+  };
 }
 
 export const AppReducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
-    case AppActionType.CHANGE_USER:
-      return changeUser(state, action.payload);
+    case AppActionType.SET_USER:
+      return setUser(state, action.payload);
 
     default:
       return state;
   }
 };
 
-export const changeUser = (state: IState, isUserLogged: boolean): IState => {
+export const setUser = (state: IState, user: IState["user"]): IState => {
   return {
     ...state,
-    isUserLogged,
+    user,
   };
 };

@@ -8,10 +8,12 @@ export enum SiteRoutes {
   REGISTRATION = "/registration",
   ADMIN_PANEL = "/admin-panel",
   RECEPTIONIST_PANEL = "/receptionist-panel",
+  CHECKOUT = "/checkout",
 }
 
-export const GoTo = (url: SiteRoutes) => {
+export const GoTo = (url: SiteRoutes, param?: string = "") => {
   const router = useRouter();
+  const mappedUrl = `${url}${param}`;
 
-  return () => router.push(url);
+  return () => router.push(mappedUrl);
 };

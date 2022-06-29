@@ -33,3 +33,14 @@ export interface IRoomData {
   createdAt: Date;
   modifiedAt: Date;
 }
+
+export interface IUserData {
+  username: string;
+  email: string;
+  name: string;
+  surname: string;
+  dateOfBirth: string;
+  authorities: string;
+  phoneNumber: string;
+  photoURI: string;
+}

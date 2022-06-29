@@ -1,9 +1,21 @@
 import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { fetchData } from "../../api/booking-service";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { TableComponent } from "../../ui/table";
 
 const AdminPanel: NextPage = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const storeUsers = async () => {
+      const users = await fetchData("/users");
+      setUsers(users.data);
+    };
+
+    storeUsers();
+  }, []);
   return (
     <MasterLayoutComponent>
       <div className="p-4">
@@ -13,7 +25,7 @@ const AdminPanel: NextPage = () => {
           sunt dolores deleniti inventore quaerat mollitia?
         </p>
         <div className="">
-          <TableComponent />
+          <TableComponent users={users} />
         </div>
       </div>
     </MasterLayoutComponent>

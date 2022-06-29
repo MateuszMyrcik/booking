@@ -138,7 +138,7 @@ export const FiltersPanelComponent: React.FC<IFiltersPanelComponent> = ({
                   id="peopleNumber"
                   type="number"
                   name="noPeople"
-                  className="ml-3 w-10 h-5 border-gray-300 border-2 border-solid rounded text-center"
+                  className="ml-3 w-16 h-5 border-gray-300 border-2 border-solid rounded text-center"
                 />
               </div>
             </div>

@@ -91,7 +91,7 @@ const Home: NextPage = () => {
         <div className="flex w-full justify-center flex-wrap">
           <ButtonComponent
             label="Find your room"
-            btnClickEvent={GoTo(SiteRoutes.SEARCH_RESULTS)}
+            btnClickEvent={GoTo(SiteRoutes.RESERVE_ROOMS)}
           />
         </div>
       </section>

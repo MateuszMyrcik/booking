@@ -10,14 +10,10 @@ export interface IAppContext {
   appState: IState;
 }
 
-// if (process.env.NODE_ENV === "development") {
-//   makeServer({ environment: "development" });
-// }
-
 export const AppContext = React.createContext({} as IAppContext);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const initialState = {};
+  const initialState = { userLevel: 0 };
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
   return (

@@ -1,0 +1,74 @@
+import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { fetchData } from "../../api/booking-service";
+import { IUserData } from "../../api/booking-service/types";
+
+import { MasterLayoutComponent } from "../../ui/master-layout";
+import { UsersTableComponent } from "../../ui/users-table";
+
+// const table: {
+//   columns?: {
+//     headingName: string;
+//   }[];
+//   rows?: {
+//     image?: string;
+//     textContent: string;
+//     contentWrapper?: Element;
+//     onClick?: VoidFunction;
+//   }[];
+// } = {
+//   columns: [
+//     {
+//       headingName: "Name",
+//     },
+//     {
+//       headingName: "Email Address",
+//     },
+//     {
+//       headingName: "Status",
+//     },
+//     {
+//       headingName: "Phone Number",
+//     },
+//     {
+//       headingName: "Date of birth",
+//     },
+//     {
+//       headingName: "Updates",
+//     },
+//     {
+//       headingName: "Delete",
+//     },
+//   ],
+//   rows: [],
+// };
+
+const UsersPage: NextPage = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const storeUsers = async () => {
+      const users = await fetchData("/users");
+      setUsers(users.data);
+    };
+
+    storeUsers();
+  }, []);
+
+  return (
+    <MasterLayoutComponent>
+      <div className="p-4">
+        <div className=" text-lg underline">Users</div>
+        <p className="max-w-md text-sm text-gray-500">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
+          sunt dolores deleniti inventore quaerat mollitia?
+        </p>
+        <div className="">
+          <UsersTableComponent users={users as IUserData[]} />
+        </div>
+      </div>
+    </MasterLayoutComponent>
+  );
+};
+
+export default UsersPage;

@@ -21,7 +21,6 @@ const fetchData = async (
   const url = `${API_URI}${path}`;
 
   console.log("fetchData", path, body, method, url);
-  debugger;
 
   return await axios(url, {
     data: body,

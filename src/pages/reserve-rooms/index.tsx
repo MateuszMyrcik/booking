@@ -6,7 +6,7 @@ import { FiltersPanelComponent } from "../../ui/filters-panel";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
 
-const SearchResults: NextPage = () => {
+const ReserveRoomsPage: NextPage = () => {
   const [rooms, setRooms] = useState([]);
   const [activeFilter, setActiveFilter] = useState({
     noPeople: "",
@@ -19,7 +19,7 @@ const SearchResults: NextPage = () => {
 
   const handleFiltering = (event: FormEvent<HTMLFormElement>) => {
     const { balcony, tv, coffeeMachine, restArea, bath, shower, peopleNumber } =
-      event.target;
+      event.target as any;
     let tempState = { ...activeFilter };
 
     // Set Checkboxes
@@ -48,13 +48,7 @@ const SearchResults: NextPage = () => {
     [];
   };
 
-  const filterData = async (params) => {
-    // const query = Object.keys(params).filter((paramKey) => params[paramKey]);
-    // .reduce(
-    //   (query, paramKey) => `${query}&${paramKey}=${params[paramKey]}`,
-    //   "?"
-    // );
-
+  const filterData = async (params: any) => {
     const filteredRooms = await fetchData("/rooms", "", params);
     console.log(filteredRooms);
 
@@ -74,7 +68,6 @@ const SearchResults: NextPage = () => {
 
   useEffect(() => {
     const getRooms = async () => {
-      // const rooms = { data: [] };
       const rooms = await fetchData("/rooms");
       setRooms(rooms.data);
     };
@@ -100,4 +93,4 @@ const SearchResults: NextPage = () => {
   );
 };
 
-export default SearchResults;
+export default ReserveRoomsPage;

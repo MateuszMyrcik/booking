@@ -5,6 +5,7 @@ import { fetchData } from "../../api/booking-service";
 import { IUserData } from "../../api/booking-service/types";
 import { AppActionType, AppReducer } from "../../state/reducers";
 import { MasterLayoutComponent } from "../../ui/master-layout";
+import { getUserLevel } from "../../utils/getUserLevel";
 import { GoTo, SiteRoutes } from "../../utils/goto";
 import { AppContext } from "../_app";
 
@@ -17,8 +18,8 @@ const Login: NextPage = () => {
     e.preventDefault();
     appDispatch({ type: AppActionType.SET_USER, payload: true });
 
-    const username = e.target.username.value as string;
-    const password = e.target.password.value as string;
+    const username = (e.target as any).username.value as string;
+    const password = (e.target as any).password.value as string;
 
     // const data = await fetchData("/rooms");
     const authToken = await fetchData(
@@ -27,7 +28,7 @@ const Login: NextPage = () => {
       "POST"
     );
 
-    const user = await fetchData("/users/admin");
+    const user = await fetchData("/users/admin" as any);
     const data = user.data as IUserData;
 
     if (authToken) {
@@ -42,6 +43,10 @@ const Login: NextPage = () => {
           dateOfBirth: data.dateOfBirth,
           phoneNumber: data.phoneNumber,
         },
+      });
+      appDispatch({
+        type: AppActionType.SET_USER_LEVEL,
+        payload: getUserLevel(data.authorities),
       });
       router.push(SiteRoutes.HOMEPAGE);
     }

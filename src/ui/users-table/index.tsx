@@ -3,9 +3,18 @@ import { IUserData } from "../../api/booking-service/types";
 
 interface ITableComponent {
   users: IUserData[];
+  columns?: {
+    headingName: string;
+  }[];
+  rows?: {
+    image?: string;
+    textContent: string;
+    contentWrapper?: Element;
+    onClick?: VoidFunction;
+  }[];
 }
 
-export const TableComponent: React.FC<ITableComponent> = ({ users }) => {
+export const UsersTableComponent: React.FC<ITableComponent> = ({ users }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full text-sm divide-y divide-gray-200">

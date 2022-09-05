@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { fetchData } from "../../api/booking-service";
-import { IRoomData, IUserData } from "../../api/booking-service/types";
+import { IRoomData } from "../../api/booking-service/types";
 import { ButtonComponent } from "../../ui/button";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { GoTo, SiteRoutes } from "../../utils/goto";
@@ -10,6 +10,8 @@ import { AppContext } from "../_app";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import DateRangeComponent from "../../ui/date-range";
+import { useRouter } from "next/router";
+import { differenceInCalendarDays } from 'date-fns'
 
 export async function getServerSideProps(context) {
   const rooms = await fetchData(`/rooms/${context.query.id}`);
@@ -29,6 +31,13 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
   const { appState, appDispatch } = useContext(AppContext);
   const [dateRange, setDateRange] = useState([]);
   const [transactionErr, setTransactionErr] = useState("");
+  const [totalPrize, setTotalPrize] = useState(0);
+  const router = useRouter();
+
+  const getPrize = (roomPrize: number, start: string, end: string) => {
+    debugger
+    return differenceInCalendarDays(start, end) * roomPrize;
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -38,21 +47,21 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
       {
         roomNo: room.roomNo,
         username: appState.user?.username,
-        noPeople: 4,
+        noPeople: room.noPeople,
         dateRange: {
           from: dateRange[0],
           to: dateRange[1],
         },
       },
       "",
-      "POST"
+      "POST" 
     );
 
     if (reservation.status === 400) {
       setTransactionErr(reservation.data.message);
     } else {
       setTransactionErr("");
-      
+      router.push(SiteRoutes.SUMMARY);
     }
   };
 
@@ -78,6 +87,15 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
                   <p className="mt-1 text-sm text-gray-500">
                     Prize for the night
                   </p>
+                  {totalPrize > 0 && (
+                    <>
+                      <p className="mt-1 text-2xl font-medium tracking-tight">
+                        $
+                        {totalPrize}
+                      </p>
+                      <p className="mt-1 text-sm text-green-500">Total prize</p>
+                    </>
+                  )}
                 </div>
 
                 <div className="mt-12">
@@ -197,7 +215,14 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
                     }}
                   >
                     <div className="col-span-6 flex">
-                      <DateRangeComponent onChange={setDateRange} />
+
+                    {/* <DateRangeComponent onChange={setDateRange} /> */}
+
+                       <DateRangeComponent onChange={(newValue) => {
+                        setDateRange(newValue)
+                        console.log(newValue)
+                        setTotalPrize(getPrize(room.pricePerNight.value, newValue[1], newValue[0]))
+                      }} />
                     </div>
                     <div className="col-span-3">
                       <label

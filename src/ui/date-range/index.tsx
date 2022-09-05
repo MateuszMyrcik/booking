@@ -14,6 +14,7 @@ interface IDateRangeComponent {
 
 const DateRangeComponent: React.FC<IDateRangeComponent> = ({ onChange }) => {
   const [value, setValue] = React.useState<DateRange<Date>>([null, null]);
+  
 
   return (
     <LocalizationProvider

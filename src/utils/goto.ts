@@ -3,12 +3,14 @@ import { useRouter } from "next/router";
 export enum SiteRoutes {
   HOMEPAGE = "/",
   CONTACT = "/contact",
-  SEARCH_RESULTS = "/search-results",
+  RESERVE_ROOMS = "/reserve-rooms",
   LOGIN = "/login",
   REGISTRATION = "/registration",
-  ADMIN_PANEL = "/admin-panel",
-  RECEPTIONIST_PANEL = "/receptionist-panel",
+  USERS = "/users",
+  ROOMS = "/rooms",
   CHECKOUT = "/checkout",
+  SUMMARY = "/summary",
+  RESERVATIONS = "/reservations",
 }
 
 export const GoTo = (url: SiteRoutes, param?: string = "") => {

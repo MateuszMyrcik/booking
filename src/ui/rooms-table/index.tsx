@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from "react";
 import { IRoom } from "../../api/booking-service/types";
+import { AppContext } from "../../pages/_app";
+import { AppActionType } from "../../state/reducers";
 
 interface ITableComponent {
   data: IRoom[];
 }
 
 export const RoomsTable: React.FC<ITableComponent> = ({ data }) => {
+  const { appState, appDispatch } = useContext(AppContext);
+
   return (
     <div className="overflow-x-auto">
       <table className="table-auto overflow-scroll w-full min-w-full text-sm divide-y divide-gray-200">
@@ -66,33 +71,21 @@ export const RoomsTable: React.FC<ITableComponent> = ({ data }) => {
               <td className="p-4 font-medium text-gray-900 ">{room.status}</td>
               <td className="p-4 font-medium text-gray-900 ">{room.version}</td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
-                <button className="text-gray-500 underline">Update</button>
+                <button
+                  onClick={() => {
+                    appDispatch({
+                      type: AppActionType.SET_ROOM,
+                      payload: room,
+                    });
+                  }}
+                  className="text-gray-500 underline"
+                >
+                  Update
+                </button>
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
                 <button className="text-gray-500 underline">Delete</button>
               </td>
-
-              {/* 
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                <>
-                  {reservation.dateRange.from} - {reservation.dateRange.to}
-                </>
-              </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                {reservation.totalCost.value}
-                {reservation.totalCost.currency}
-              </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                <strong
-                  className={`bg-red-100 text-red-700 px-3 py-1.5 rounded text-xs font-medium text-yellow-700 
-                  `}
-                >
-                  {reservation.status}
-                </strong>
-              </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                {reservation.noPeople}
-              </td> */}
             </tr>
           ))}
         </tbody>

@@ -158,7 +158,6 @@ export const FormDialogComponent = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
             <DialogContentText>{contentText}</DialogContentText>
-            {children}
             {formInputs.map((input) => getInputField(input))}
           </DialogContent>
 

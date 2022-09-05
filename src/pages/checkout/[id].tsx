@@ -11,10 +11,10 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import DateRangeComponent from "../../ui/date-range";
 import { useRouter } from "next/router";
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays } from "date-fns";
 
-export async function getServerSideProps(context) {
-  const rooms = await fetchData(`/rooms/${context.query.id}`);
+export async function getServerSideProps(context: any) {
+  const rooms = await fetchData(`/rooms/${context.query.id}` as any);
 
   return {
     props: {
@@ -35,8 +35,7 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
   const router = useRouter();
 
   const getPrize = (roomPrize: number, start: string, end: string) => {
-    debugger
-    return differenceInCalendarDays(start, end) * roomPrize;
+    return differenceInCalendarDays(new Date(start), new Date(end)) * roomPrize;
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -54,7 +53,7 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
         },
       },
       "",
-      "POST" 
+      "POST"
     );
 
     if (reservation.status === 400) {
@@ -90,8 +89,7 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
                   {totalPrize > 0 && (
                     <>
                       <p className="mt-1 text-2xl font-medium tracking-tight">
-                        $
-                        {totalPrize}
+                        ${totalPrize}
                       </p>
                       <p className="mt-1 text-sm text-green-500">Total prize</p>
                     </>
@@ -215,14 +213,21 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
                     }}
                   >
                     <div className="col-span-6 flex">
+                      {/* <DateRangeComponent onChange={setDateRange} /> */}
 
-                    {/* <DateRangeComponent onChange={setDateRange} /> */}
-
-                       <DateRangeComponent onChange={(newValue) => {
-                        setDateRange(newValue)
-                        console.log(newValue)
-                        setTotalPrize(getPrize(room.pricePerNight.value, newValue[1], newValue[0]))
-                      }} />
+                      <DateRangeComponent
+                        onChange={(newValue) => {
+                          setDateRange(newValue);
+                          console.log(newValue);
+                          setTotalPrize(
+                            getPrize(
+                              room.pricePerNight.value,
+                              newValue[1],
+                              newValue[0]
+                            )
+                          );
+                        }}
+                      />
                     </div>
                     <div className="col-span-3">
                       <label

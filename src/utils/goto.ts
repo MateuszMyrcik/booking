@@ -13,9 +13,10 @@ export enum SiteRoutes {
   RESERVATIONS = "/reservations",
 }
 
-export const GoTo = (url: SiteRoutes, param?: string = "") => {
+export const GoTo = (url: SiteRoutes, param?: string) => {
   const router = useRouter();
-  const mappedUrl = `${url}${param}`;
+  const paramm = param ? param : "";
+  const mappedUrl = `${url}${paramm}`;
 
   return () => router.push(mappedUrl);
 };

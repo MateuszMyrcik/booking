@@ -6,43 +6,6 @@ import { IUserData } from "../../api/booking-service/types";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { UsersTableComponent } from "../../ui/users-table";
 
-// const table: {
-//   columns?: {
-//     headingName: string;
-//   }[];
-//   rows?: {
-//     image?: string;
-//     textContent: string;
-//     contentWrapper?: Element;
-//     onClick?: VoidFunction;
-//   }[];
-// } = {
-//   columns: [
-//     {
-//       headingName: "Name",
-//     },
-//     {
-//       headingName: "Email Address",
-//     },
-//     {
-//       headingName: "Status",
-//     },
-//     {
-//       headingName: "Phone Number",
-//     },
-//     {
-//       headingName: "Date of birth",
-//     },
-//     {
-//       headingName: "Updates",
-//     },
-//     {
-//       headingName: "Delete",
-//     },
-//   ],
-//   rows: [],
-// };
-
 const UsersPage: NextPage = () => {
   const [users, setUsers] = useState([]);
 

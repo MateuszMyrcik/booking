@@ -63,11 +63,15 @@ export const ReservationsTableComponent: React.FC<ITableComponent> = ({
               <td className="p-4 text-gray-700 whitespace-nowrap">
                 {reservation.noPeople}
               </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                <button className="text-gray-500 underline">Update</button>
+              <td className="p-4 text-gray-700 whitespace-nowrap hover:text-gray-200">
+                <button className="text-gray-500 underline hover:text-blue-500">
+                  Approve
+                </button>
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
-                <button className="text-gray-500 underline">Delete</button>
+                <button className="text-gray-500 underline hover:text-blue-500">
+                  Decline
+                </button>
               </td>
             </tr>
           ))}

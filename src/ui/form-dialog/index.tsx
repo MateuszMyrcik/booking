@@ -1,19 +1,12 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { ButtonComponent } from "../button";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import {
-  Checkbox,
-  FormControlLabel,
-  InputLabel,
-  NativeSelect,
-} from "@mui/material";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface FormDialogComponentProps {
   btnLabel: string;
@@ -45,10 +38,10 @@ export const FormDialogComponent = ({
   title,
   contentText,
   formInputs,
-  children,
   onFormSubmit,
 }: FormDialogComponentProps) => {
   const [open, setOpen] = React.useState(false);
+
   const {
     register,
     handleSubmit,
@@ -57,7 +50,7 @@ export const FormDialogComponent = ({
 
   const onSubmit: SubmitHandler<any> = (data) => {
     if (isSubmitSuccessful) {
-      // handleClose();
+      handleClose();
       onFormSubmit(data);
     }
   };
@@ -123,7 +116,6 @@ export const FormDialogComponent = ({
             </div>
           </>
         );
-
       default:
         return (
           <div>

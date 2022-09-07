@@ -8,6 +8,7 @@ export enum SiteRoutes {
   REGISTRATION = "/registration",
   USERS = "/users",
   ROOMS = "/rooms",
+  ROOM = "/room",
   CHECKOUT = "/checkout",
   SUMMARY = "/summary",
   RESERVATIONS = "/reservations",

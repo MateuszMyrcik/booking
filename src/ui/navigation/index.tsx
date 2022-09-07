@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import { useRouter } from "next/router";
 import * as React from "react";
-import { INavigationItem } from "../../configs/navigation";
+import { INavigationItem, PermissionLevel } from "../../configs/navigation";
 import { AppContext } from "../../pages/_app";
 import { AppActionType } from "../../state/reducers";
 import { GoTo, SiteRoutes } from "../../utils/goto";
-import { ButtonComponent } from "../button";
+import { LogoComponent } from "../logo";
 
 interface INavigationComponent {
   items: INavigationItem[];
@@ -20,20 +19,23 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
         <div className="max-w-screen-xl p-4 mx-auto">
           <div className="flex items-center justify-between space-x-4 lg:space-x-10">
             <div className="flex lg:w-0 lg:flex-1">
-              <span className="w-20 h-10 bg-gray-200 rounded-lg"></span>
+              <LogoComponent />
             </div>
 
             <nav className="hidden space-x-8 text-sm font-medium md:flex">
-              {items.map((item) => (
-                <button
-                  key={item.url}
-                  type="button"
-                  onClick={GoTo(item.url as SiteRoutes)}
-                  className="text-gray-500"
-                >
-                  {item.label}
-                </button>
-              ))}
+              {items.map((item) => {
+                if (appState.userLevel < item.permissionLevel) return null;
+                return (
+                  <button
+                    key={item.url}
+                    type="button"
+                    onClick={GoTo(item.url as SiteRoutes)}
+                    className="text-gray-500"
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
             </nav>
 
             {appState.user ? (
@@ -62,6 +64,10 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
                       appDispatch({
                         type: AppActionType.SET_USER,
                         payload: false,
+                      });
+                      appDispatch({
+                        type: AppActionType.SET_USER_LEVEL,
+                        payload: PermissionLevel.GUEST,
                       });
                     }}
                     className="block p-2.5 text-gray-600 bg-white rounded-lg hover:text-gray-700 shrink-0 shadow-sm"

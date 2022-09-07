@@ -1,8 +1,10 @@
+import { LogoComponent } from "../logo";
+
 export const FooterComponent = () => {
   return (
     <div className="bg-gray-50">
       <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
-        <span className="block w-32 h-10 bg-gray-200 rounded-lg"></span>
+        <LogoComponent />
 
         <div className="grid grid-cols-1 gap-8 mt-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>

@@ -23,8 +23,7 @@ const UsersPage: NextPage = () => {
       <div className="p-4">
         <div className=" text-lg underline">Users</div>
         <p className="max-w-md text-sm text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
-          sunt dolores deleniti inventore quaerat mollitia?
+          Here update status of your reservations and decline them
         </p>
         <div className="">
           <UsersTableComponent users={users as IUserData[]} />

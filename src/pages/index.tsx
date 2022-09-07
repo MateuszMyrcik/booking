@@ -32,67 +32,43 @@ const Home: NextPage = () => {
 
   return (
     <MasterLayoutComponent>
-      <section className="overflow-hidden text-white lg:grid bg-gradient-to-r from-blue-600 to-purple-700 lg:grid-cols-2 lg:items-center">
-        <div className="p-12 text-center sm:p-16 lg:p-24 lg:text-left">
-          <div className="max-w-lg mx-auto lg:ml-0 lg:pt-12">
-            <p className="text-3xl font-bold sm:text-4xl">
-              Lorem ipsum, dolor sit amet consectetur.
-            </p>
+      <section className="bg-gray-100">
+        <div className="">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-screen">
+            <div className="relative">
+              <div className="relative h-64 sm:h-80 lg:h-full">
+                <img
+                  className="absolute inset-0 object-cover w-full h-full"
+                  src="https://www.hyperui.dev/photos/house-1.jpeg"
+                  alt="Indoors house"
+                />
+              </div>
+            </div>
 
-            <p className="mt-4">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptatibus iusto odit, magni repellat aliquam!
-            </p>
+            <div className="relative flex items-center bg-gray-100">
+              <span className="hidden lg:inset-y-0 lg:absolute lg:w-16 lg:bg-gray-100 lg:block lg:-left-16"></span>
 
-            <div className="mt-4 mx-auto">
-              <ButtonComponent label="Show more" secondType={true} />
+              <div className="p-8 sm:p-16 lg:p-24">
+                <h2 className="text-2xl font-bold sm:text-3xl">
+                  Find a place for your next stay
+                </h2>
+
+                <p className="mt-4 text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Aliquid, molestiae! Quidem est esse numquam odio deleniti,
+                  beatae, magni dolores provident quaerat totam eos, aperiam
+                  architecto eius quis quibusdam fugiat dicta.
+                </p>
+
+                <a
+                  className="inline-block px-12 py-3 mt-8 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded active:text-blue-500 hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring"
+                  href={SiteRoutes.RESERVE_ROOMS}
+                >
+                  Start now
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="lg:pt-24">
-          <div className="relative w-full h-64 sm:h-96 lg:h-[500px]">
-            <img
-              className="absolute inset-0 object-cover w-full h-full lg:rounded-tl-3xl"
-              src="/img/landing-bg.jpeg"
-              alt=""
-            />
-          </div>
-        </div>
-      </section>
-      <section className="pt-12 ">
-        {/* <form className="flex w-full justify-center flex-wrap">
-          <div>
-            <input
-              className="w-full py-3 pl-3 pr-12 text-sm border-2 border-gray-200 rounded"
-              type="date"
-              name="date-from"
-            ></input>
-            <label htmlFor="date"></label>
-          </div>
-          <div>
-            <input
-              className="w-full py-3 pl-3 pr-12 text-sm border-2 border-gray-200 rounded"
-              type="date"
-              name="date-to"
-            ></input>
-            <label htmlFor="date"></label>
-          </div>
-          <div>
-            <input
-              className="w-full py-3 pl-3 pr-12 text-sm border-2 border-gray-200 rounded"
-              type="number"
-              name="people_number"
-              placeholder="0"
-            ></input>
-            <label htmlFor="people_number"></label>
-          </div>
-        </form> */}
-        <div className="flex w-full justify-center flex-wrap">
-          <ButtonComponent
-            label="Find your room"
-            btnClickEvent={GoTo(SiteRoutes.RESERVE_ROOMS)}
-          />
         </div>
       </section>
     </MasterLayoutComponent>

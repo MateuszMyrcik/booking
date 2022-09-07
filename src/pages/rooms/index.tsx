@@ -89,9 +89,11 @@ const RoomsPage: NextPage = () => {
   return (
     <MasterLayoutComponent>
       <div className="p-4">
-        <div className="flex justify-between">
-          <h2>All Rooms: </h2>
-
+        <div className=" text-lg underline">Rooms</div>
+        <p className="max-w-md text-sm text-gray-500">
+          Here you can update data info or delete room completely
+        </p>
+        <div className="flex justify-between pt-4">
           <FormDialogComponent
             btnLabel="Add room"
             contentText="Specify all room details"

@@ -30,7 +30,7 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
                     key={item.url}
                     type="button"
                     onClick={GoTo(item.url as SiteRoutes)}
-                    className="text-gray-500"
+                    className="text-gray-500 hover:underline"
                   >
                     {item.label}
                   </button>

@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FormEvent, useContext } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { fetchData } from "../../api/booking-service";
 import { IUserData } from "../../api/booking-service/types";
 import { AppActionType, AppReducer } from "../../state/reducers";
+import { ErrorMessageComponent } from "../../ui/error-message";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { getUserLevel } from "../../utils/getUserLevel";
 import { GoTo, SiteRoutes } from "../../utils/goto";
@@ -11,27 +12,31 @@ import { AppContext } from "../_app";
 
 const Login: NextPage = () => {
   const router = useRouter();
+  const [error, setError] = useState(null);
 
   const { appState, appDispatch } = useContext(AppContext);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    appDispatch({ type: AppActionType.SET_USER, payload: true });
 
     const username = (e.target as any).username.value as string;
     const password = (e.target as any).password.value as string;
 
-    // const data = await fetchData("/rooms");
     const authToken = await fetchData(
       "/login",
       { username: username, password: password },
+      "",
       "POST"
     );
 
-    const user = await fetchData("/users/admin" as any);
-    const data = user.data as IUserData;
+    if (authToken.status !== 200) {
+      setError(authToken);
+    } else {
+      setError(null);
+      debugger;
+      const user = await fetchData(`/users/${username}` as any);
+      const data = user.data as IUserData;
 
-    if (authToken) {
       appDispatch({
         type: AppActionType.SET_USER,
         payload: {
@@ -138,6 +143,11 @@ const Login: NextPage = () => {
               >
                 Sign in
               </button>
+              {error && (
+                <ErrorMessageComponent
+                  label={"Invalid password or username. Please try again"}
+                />
+              )}
             </form>
             <p className="text-sm text-center text-gray-500">
               No account?

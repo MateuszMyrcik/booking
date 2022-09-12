@@ -42,7 +42,7 @@ const RoomsPage: NextPage = () => {
   const saveRoom = async (roomData: any) => {
     console.log("save", roomData);
     const mappedData = { ...roomData, images: [{ uri: roomData.image }] };
-    // debugger;
+
     await fetchData(
       "/rooms",
       {

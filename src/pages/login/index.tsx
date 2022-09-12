@@ -33,7 +33,7 @@ const Login: NextPage = () => {
       setError(authToken);
     } else {
       setError(null);
-      debugger;
+
       const user = await fetchData(`/users/${username}` as any);
       const data = user.data as IUserData;
 

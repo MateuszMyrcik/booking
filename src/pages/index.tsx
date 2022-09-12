@@ -60,12 +60,12 @@ const Home: NextPage = () => {
                   architecto eius quis quibusdam fugiat dicta.
                 </p>
 
-                <a
+                <button
                   className="inline-block px-12 py-3 mt-8 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded active:text-blue-500 hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring"
-                  href={SiteRoutes.RESERVE_ROOMS}
+                  onClick={GoTo(SiteRoutes.RESERVE_ROOMS)}
                 >
                   Start now
-                </a>
+                </button>
               </div>
             </div>
           </div>

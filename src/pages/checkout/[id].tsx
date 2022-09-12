@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { fetchData } from "../../api/booking-service";
 import { IRoomData } from "../../api/booking-service/types";
 import { ButtonComponent } from "../../ui/button";
@@ -29,6 +29,7 @@ export interface ICheckoutPage {
 
 const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
   const { appState, appDispatch } = useContext(AppContext);
+  const [roomUnavailibility, setRoomUnavailibility] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [transactionErr, setTransactionErr] = useState("");
   const [totalPrize, setTotalPrize] = useState(0);
@@ -63,6 +64,18 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
       router.push(SiteRoutes.SUMMARY);
     }
   };
+
+  useEffect(() => {
+    const getRoomUnvailibity = async () => {
+      const unvailibity = await fetchData(
+        `/rooms/${room.roomNo}/unavailability` as any
+      );
+
+      setRoomUnavailibility(unvailibity.data);
+    };
+
+    getRoomUnvailibity();
+  }, [room.roomNo]);
 
   return (
     <MasterLayoutComponent>
@@ -216,9 +229,10 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
                       {/* <DateRangeComponent onChange={setDateRange} /> */}
 
                       <DateRangeComponent
+                        unavailabilityRange={roomUnavailibility}
                         onChange={(newValue) => {
                           setDateRange(newValue);
-                          console.log(newValue);
+
                           setTotalPrize(
                             getPrize(
                               room.pricePerNight.value,

@@ -1,6 +1,6 @@
 interface ErrorMessageComponentProps {
   label: string;
-  className: string;
+  className?: string;
 }
 
 export const ErrorMessageComponent: React.FC<ErrorMessageComponentProps> = ({

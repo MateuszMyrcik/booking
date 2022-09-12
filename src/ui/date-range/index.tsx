@@ -7,14 +7,26 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
+import dayjs from "dayjs";
 
 interface IDateRangeComponent {
   onChange: (arg: any) => void;
+  unavailabilityRange: { from: Date; to: Date }[];
 }
 
-const DateRangeComponent: React.FC<IDateRangeComponent> = ({ onChange }) => {
+const DateRangeComponent: React.FC<IDateRangeComponent> = ({
+  onChange,
+  unavailabilityRange,
+}) => {
   const [value, setValue] = React.useState<DateRange<Date>>([null, null]);
-  
+
+  const isDisabled = (date: Date) => {
+    return unavailabilityRange?.some(({ from, to }) => {
+      if (dayjs(date).isAfter(from) && dayjs(date).isBefore(to)) {
+        return true;
+      }
+    });
+  };
 
   return (
     <LocalizationProvider
@@ -23,6 +35,8 @@ const DateRangeComponent: React.FC<IDateRangeComponent> = ({ onChange }) => {
     >
       <DateRangePicker
         value={value}
+        disablePast={true}
+        shouldDisableDate={isDisabled}
         onChange={(newValue) => {
           onChange(newValue);
           setValue(newValue);

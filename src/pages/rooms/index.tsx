@@ -6,6 +6,7 @@ import { FormDialogComponent, IFormInput } from "../../ui/form-dialog";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { RoomsTable } from "../../ui/rooms-table";
+import { SpinnerComponent } from "../../ui/spinner";
 
 const FormInputs: any = [
   { id: "roomNo", label: "Room number", type: "number" },
@@ -38,11 +39,12 @@ const FormInputs: any = [
 
 const RoomsPage: NextPage = () => {
   const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveRoom = async (roomData: any) => {
     console.log("save", roomData);
     const mappedData = { ...roomData, images: [{ uri: roomData.image }] };
-
+    setIsLoading(true);
     await fetchData(
       "/rooms",
       {
@@ -74,13 +76,15 @@ const RoomsPage: NextPage = () => {
       },
       "",
       "POST"
-    ).then((e) => console.log("finish", e));
+    ).then((e) => setIsLoading(false));
   };
 
   useEffect(() => {
     const storeReservations = async () => {
+      setIsLoading(true);
       const roomRes = await fetchData("/rooms");
       setRooms(roomRes.data);
+      setIsLoading(false);
     };
 
     storeReservations();
@@ -106,7 +110,11 @@ const RoomsPage: NextPage = () => {
         </div>
 
         <div className="">
-          <RoomsTable data={rooms}></RoomsTable>
+          {isLoading ? (
+            <SpinnerComponent />
+          ) : (
+            <RoomsTable data={rooms}></RoomsTable>
+          )}
         </div>
       </div>
     </MasterLayoutComponent>

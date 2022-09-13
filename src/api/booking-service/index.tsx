@@ -19,7 +19,6 @@ const fetchData = async (
   method: IFetchMethod = "GET"
   // sort: string = "ASC"
 ) => {
-  // const url = `${API_URI}${path}${sort ? `:${sort}` : ""}`;
   const url = `${API_URI}${path}`;
 
   return await axios(url, {

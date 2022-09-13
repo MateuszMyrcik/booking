@@ -5,9 +5,12 @@ import { CardsComponent } from "../../ui/cards";
 import { FiltersPanelComponent } from "../../ui/filters-panel";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
+import { SpinnerComponent } from "../../ui/spinner";
 
 const ReserveRoomsPage: NextPage = () => {
   const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [activeFilter, setActiveFilter] = useState({
     noPeople: "",
     bathroomType: "",
@@ -49,9 +52,10 @@ const ReserveRoomsPage: NextPage = () => {
   };
 
   const filterData = async (params: any) => {
+    setIsLoading(true);
     const filteredRooms = await fetchData("/rooms", "", params);
-
     setRooms(filteredRooms.data);
+    setIsLoading(false);
   };
 
   const handleResetFiltering = () => {
@@ -67,8 +71,10 @@ const ReserveRoomsPage: NextPage = () => {
 
   useEffect(() => {
     const getRooms = async () => {
+      setIsLoading(true);
       const rooms = await fetchData("/rooms");
       setRooms(rooms.data);
+      setIsLoading(false);
     };
 
     getRooms();
@@ -83,9 +89,13 @@ const ReserveRoomsPage: NextPage = () => {
           />
         </aside>
         <section className="flex-1">
-          {rooms.map((room, index) => (
-            <CardsComponent room={room} key={index} />
-          ))}
+          {isLoading ? (
+            <SpinnerComponent />
+          ) : (
+            rooms.map((room, index) => (
+              <CardsComponent room={room} key={index} />
+            ))
+          )}
         </section>
       </div>
     </MasterLayoutComponent>

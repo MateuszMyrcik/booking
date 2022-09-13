@@ -37,28 +37,48 @@ const RoomPage: NextPage<IRoomPage> = ({ room: roomRes }) => {
     defaultValues,
   });
 
+  const onSubmit = async (room: IRoom) => {
+    const mappedData: IRoom = {
+      ...room,
+      images: [...(roomRes?.images as any), { uri: (room as any).image }],
+      pricePerNight: {
+        value: room.pricePerNight as any,
+        currency: "EUR",
+      },
+    };
+    console.log(mappedData);
+    const result = await fetchData(
+      `/rooms/${roomRes.roomNo}` as any,
+      mappedData,
+      "",
+      "PUT"
+    );
+  };
+
   return (
     <MasterLayoutComponent>
       <section className="">
         <div className="px-12 py-2">
           <div className="text-lg underline">Checkout</div>
           <p className="max-w-md text-sm text-gray-500">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
-            sunt dolores deleniti inventore quaerat mollitia?
+            Here you can edit details of room /{roomRes.roomNo}/
           </p>
         </div>
         <div className="px-12 py-4 bg-slate-100">
           <form
-            onSubmit={handleSubmit((data) => setRoom(data))}
+            onSubmit={handleSubmit((data) => {
+              setRoom(data);
+              onSubmit(data);
+            })}
             className="form"
           >
             <div className="flex justify-center gap-8 p-8">
-              <InputComponent
+              {/* <InputComponent
                 control={control}
                 name="roomNo"
                 label="Room Number"
                 type="number"
-              ></InputComponent>
+              ></InputComponent> */}
               <InputComponent
                 control={control}
                 name="noPeople"
@@ -125,6 +145,12 @@ const RoomPage: NextPage<IRoomPage> = ({ room: roomRes }) => {
                 label="Bathroom Type"
                 name="bathroomType"
                 options={[{ label: "SHOWER" }, { label: "BATH" }]}
+              ></SelectComponent>
+              <SelectComponent
+                control={control}
+                label="STATUS"
+                name="status"
+                options={[{ label: "ACTIVE" }, { label: "INACTIVE" }]}
               ></SelectComponent>
             </div>
 

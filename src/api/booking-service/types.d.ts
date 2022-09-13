@@ -100,8 +100,6 @@ export interface RoomSize {
   unit: string;
 }
 export interface ImagesEntity {
-  id: number;
-  roomNo: string;
   uri: string;
 }
 

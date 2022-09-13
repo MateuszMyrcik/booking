@@ -4,9 +4,10 @@ import { GoTo, SiteRoutes } from "../../utils/goto";
 
 interface ITableComponent {
   data: IRoom[];
+  onDelete: (id: string) => void;
 }
 
-export const RoomsTable: React.FC<ITableComponent> = ({ data }) => {
+export const RoomsTable: React.FC<ITableComponent> = ({ data, onDelete }) => {
   return (
     <div className="overflow-x-auto">
       <table className="table-auto overflow-scroll w-full min-w-full text-sm divide-y divide-gray-200">
@@ -75,7 +76,10 @@ export const RoomsTable: React.FC<ITableComponent> = ({ data }) => {
                 </button>
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
-                <button className="text-gray-500 underline hover:text-blue-500">
+                <button
+                  className="text-gray-500 underline hover:text-blue-500"
+                  onClick={() => onDelete(room.roomNo)}
+                >
                   Delete
                 </button>
               </td>

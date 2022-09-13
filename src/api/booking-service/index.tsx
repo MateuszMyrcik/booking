@@ -10,7 +10,7 @@ type IApiPath =
   | "/register"
   | "/reservations";
 
-type IFetchMethod = "POST" | "GET" | "DELETE" | "PATCH";
+type IFetchMethod = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
 
 const fetchData = async (
   path: IApiPath,

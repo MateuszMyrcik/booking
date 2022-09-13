@@ -42,41 +42,20 @@ const RoomsPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const saveRoom = async (roomData: any) => {
-    console.log("save", roomData);
     const mappedData = { ...roomData, images: [{ uri: roomData.image }] };
     setIsLoading(true);
-    await fetchData(
-      "/rooms",
-      {
-        roomNo: "011",
-        noPeople: 3,
-        description: "First test room",
-        roomType: "STANDARD",
-        pricePerNight: {
-          value: 100,
-          currency: "PLN",
-        },
-        isBalcony: true,
-        isOutstandingView: true,
-        isTv: true,
-        bathroomType: "SHOWER",
-        isCoffeeMachine: true,
-        isRestArea: true,
-        roomSize: {
-          value: 30,
-          unit: "m2",
-        },
-        images: [
-          {
-            roomNo: "2",
-            uri: "https://media.timeout.com/images/105859033/image.jpg",
-          },
-        ],
-        status: "ACTIVE",
-      },
-      "",
-      "POST"
-    ).then((e) => setIsLoading(false));
+    await fetchData("/rooms", mappedData, "", "POST");
+    const roomRes = await fetchData("/rooms");
+    setRooms(roomRes.data);
+    setIsLoading(false);
+  };
+
+  const onDelete = async (id: string) => {
+    setIsLoading(true);
+    await fetchData(`/rooms/${id}` as any, {}, "", "DELETE");
+    const roomRes = await fetchData("/rooms");
+    setRooms(roomRes.data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -113,7 +92,7 @@ const RoomsPage: NextPage = () => {
           {isLoading ? (
             <SpinnerComponent />
           ) : (
-            <RoomsTable data={rooms}></RoomsTable>
+            <RoomsTable data={rooms} onDelete={onDelete}></RoomsTable>
           )}
         </div>
       </div>

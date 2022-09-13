@@ -6,6 +6,7 @@ import { IUserData } from "../../api/booking-service/types";
 import { AppActionType, AppReducer } from "../../state/reducers";
 import { ErrorMessageComponent } from "../../ui/error-message";
 import { MasterLayoutComponent } from "../../ui/master-layout";
+import { SpinnerComponent } from "../../ui/spinner";
 import { getUserLevel } from "../../utils/getUserLevel";
 import { GoTo, SiteRoutes } from "../../utils/goto";
 import { AppContext } from "../_app";
@@ -13,6 +14,7 @@ import { AppContext } from "../_app";
 const Login: NextPage = () => {
   const router = useRouter();
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { appState, appDispatch } = useContext(AppContext);
 
@@ -22,12 +24,14 @@ const Login: NextPage = () => {
     const username = (e.target as any).username.value as string;
     const password = (e.target as any).password.value as string;
 
+    setIsLoading(true);
     const authToken = await fetchData(
       "/login",
       { username: username, password: password },
       "",
       "POST"
     );
+    setIsLoading(false);
 
     if (authToken.status !== 200) {
       setError(authToken);
@@ -159,6 +163,7 @@ const Login: NextPage = () => {
                 Sign up
               </button>
             </p>
+            {isLoading && <SpinnerComponent />}
           </div>
         </div>
       </div>

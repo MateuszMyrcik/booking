@@ -1,13 +1,34 @@
 /* eslint-disable @next/next/no-img-element */
+import { useContext } from "react";
 import { IReservation, IUserData } from "../../api/booking-service/types";
+import { PermissionLevel } from "../../configs/navigation";
+import { AppContext } from "../../pages/_app";
 
 interface ITableComponent {
   data: IReservation[];
+  onDeclineClick: (id: number) => void;
+  onApproveClick: (id: number) => void;
 }
 
 export const ReservationsTableComponent: React.FC<ITableComponent> = ({
   data,
+  onDeclineClick,
+  onApproveClick,
 }) => {
+  const { appState } = useContext(AppContext);
+
+  const getStatusColor = (status: IReservation["status"]) => {
+    switch (status) {
+      case "ACCEPTED":
+        return "bg-green-100 text-green-700";
+      case "PAID":
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-700";
+      default:
+        return "bg-red-100 text-red-700";
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full text-sm divide-y divide-gray-200">
@@ -26,14 +47,18 @@ export const ReservationsTableComponent: React.FC<ITableComponent> = ({
               <div className="flex items-center">Status</div>
             </th>
             <th className="p-4 font-medium text-left text-gray-900 whitespace-nowrap">
-              <div className="flex items-center">People Number</div>
+              <div className="flex items-center">Reservation ID</div>
             </th>
-            <th className="p-4 font-medium text-left text-gray-900 whitespace-nowrap">
-              <div className="flex items-center">Update</div>
-            </th>
-            <th className="p-4 font-medium text-left text-gray-900 whitespace-nowrap">
-              <div className="flex items-center">Delete</div>
-            </th>
+            {appState.userLevel >= PermissionLevel.RECEPTIONIST && (
+              <>
+                <th className="p-4 font-medium text-left text-gray-900 whitespace-nowrap">
+                  <div className="flex items-center">Update</div>
+                </th>
+                <th className="p-4 font-medium text-left text-gray-900 whitespace-nowrap">
+                  <div className="flex items-center">Delete</div>
+                </th>
+              </>
+            )}
           </tr>
         </thead>
 
@@ -54,25 +79,38 @@ export const ReservationsTableComponent: React.FC<ITableComponent> = ({
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
                 <strong
-                  className={`bg-red-100 text-red-700 px-3 py-1.5 rounded text-xs font-medium text-yellow-700 
+                  className={`${getStatusColor(
+                    reservation.status
+                  )} px-3 py-1.5 rounded text-xs font-medium
                   `}
                 >
                   {reservation.status}
                 </strong>
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
-                {reservation.noPeople}
+                {reservation.id}
               </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap hover:text-gray-200">
-                <button className="text-gray-500 underline hover:text-blue-500">
-                  Approve
-                </button>
-              </td>
-              <td className="p-4 text-gray-700 whitespace-nowrap">
-                <button className="text-gray-500 underline hover:text-blue-500">
-                  Decline
-                </button>
-              </td>
+              {appState.userLevel >= PermissionLevel.RECEPTIONIST && (
+                <>
+                  <td className="p-4 text-gray-700 whitespace-nowrap hover:text-gray-200">
+                    <button
+                      className="text-gray-500 underline hover:text-blue-500 disabled:text-red-300 disabled:no-underline disabled:cursor-not-allowed"
+                      onClick={() => onApproveClick(reservation.id)}
+                      disabled={reservation.status !== "PAID"}
+                    >
+                      Approve
+                    </button>
+                  </td>
+                  <td className="p-4 text-gray-700 whitespace-nowrap">
+                    <button
+                      className="text-gray-500 underline hover:text-blue-500"
+                      onClick={() => onDeclineClick(reservation.id)}
+                    >
+                      Decline
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>

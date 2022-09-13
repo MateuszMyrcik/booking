@@ -69,7 +69,7 @@ export interface IReservation {
   parkingIncluded: boolean;
   animalsIncluded: boolean;
   totalCost: TotalCost;
-  status: string;
+  status: "ACCEPTED" | "PAID" | "PENDING" | "REJECTED";
 }
 
 export interface IRoom {

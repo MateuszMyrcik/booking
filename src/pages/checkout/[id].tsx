@@ -12,6 +12,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import DateRangeComponent from "../../ui/date-range";
 import { useRouter } from "next/router";
 import { differenceInCalendarDays } from "date-fns";
+import { AppActionType } from "../../state/reducers";
 
 export async function getServerSideProps(context: any) {
   const rooms = await fetchData(`/rooms/${context.query.id}` as any);
@@ -61,6 +62,10 @@ const Checkout: NextPage<ICheckoutPage> = ({ room }) => {
       setTransactionErr(reservation.data.message);
     } else {
       setTransactionErr("");
+      appDispatch({
+        type: AppActionType.SET_RESERVATION,
+        payload: { ...reservation.data },
+      });
       router.push(SiteRoutes.SUMMARY);
     }
   };

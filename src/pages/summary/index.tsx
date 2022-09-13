@@ -1,26 +1,25 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { useRouter } from "next/router";
 import { SiteRoutes } from "../../utils/goto";
 import { ButtonComponent } from "../../ui/button";
+import { AppContext } from "../_app";
+import { fetchData } from "../../api/booking-service";
 
 const Summary: NextPage = () => {
   const [BLIKCode, setBLIKCode] = useState("");
   const [error, setError] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const router = useRouter();
+  const { appState } = useContext(AppContext);
 
   return (
     <MasterLayoutComponent>
       <div className="pt-64 flex place-items-center flex-col w-3/6 mx-auto">
         {!isVerified && (
           <>
-            {" "}
             <div className="text-lg underline">BLIK payment</div>
-            {/* <p className="max-w-md text-sm text-gray-500">
-          Enter the blik code just received from the bank
-        </p> */}
             <form
               className=""
               onSubmit={(e) => {
@@ -28,6 +27,12 @@ const Summary: NextPage = () => {
                 if (BLIKCode !== "111111") {
                   setError(true);
                 } else {
+                  fetchData(
+                    `/reservations/${appState.reservation?.id}` as any,
+                    { status: "PAID" },
+                    "",
+                    "PATCH"
+                  );
                   setError(false);
                   setIsVerified(true);
                 }

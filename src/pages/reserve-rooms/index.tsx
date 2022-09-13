@@ -50,7 +50,6 @@ const ReserveRoomsPage: NextPage = () => {
 
   const filterData = async (params: any) => {
     const filteredRooms = await fetchData("/rooms", "", params);
-    console.log(filteredRooms);
 
     setRooms(filteredRooms.data);
   };

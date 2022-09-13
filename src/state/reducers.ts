@@ -1,9 +1,10 @@
-import { IRoom, IRoomData } from "../api/booking-service/types";
+import { IReservation, IRoom, IRoomData } from "../api/booking-service/types";
 
 export enum AppActionType {
   SET_USER = "SET_USER",
   SET_USER_LEVEL = "SET_USER_LEVEL",
   SET_ROOM = "SET_ROOM",
+  SET_RESERVATION = "SET_RESERVATION",
 }
 export interface IAction {
   type: AppActionType;
@@ -23,6 +24,7 @@ export interface IState {
     phoneNumber: string;
   };
   room?: IRoomData;
+  reservation?: IReservation;
 }
 
 export const AppReducer = (state: IState, action: IAction): IState => {
@@ -33,6 +35,8 @@ export const AppReducer = (state: IState, action: IAction): IState => {
       return setUserLevel(state, action.payload);
     case AppActionType.SET_ROOM:
       return setRoom(state, action.payload);
+    case AppActionType.SET_RESERVATION:
+      return setReservation(state, action.payload);
     default:
       return state;
   }
@@ -54,9 +58,20 @@ export const setUserLevel = (
     userLevel,
   };
 };
+
 export const setRoom = (state: IState, room: IState["room"]): IState => {
   return {
     ...state,
     room,
+  };
+};
+
+export const setReservation = (
+  state: IState,
+  reservation: IState["reservation"]
+): IState => {
+  return {
+    ...state,
+    reservation,
   };
 };

@@ -10,17 +10,17 @@ type IApiPath =
   | "/register"
   | "/reservations";
 
-type IFetchMethod = "POST" | "GET" | "DELETE";
+type IFetchMethod = "POST" | "GET" | "DELETE" | "PATCH";
 
 const fetchData = async (
   path: IApiPath,
   body?: any,
   query: any = "",
   method: IFetchMethod = "GET"
+  // sort: string = "ASC"
 ) => {
+  // const url = `${API_URI}${path}${sort ? `:${sort}` : ""}`;
   const url = `${API_URI}${path}`;
-
-  console.log("fetchData", path, body, method, url);
 
   return await axios(url, {
     data: body,

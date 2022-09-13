@@ -4,9 +4,29 @@ import { fetchData } from "../../api/booking-service";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { ReservationsTableComponent } from "../../ui/reservations-table";
+import { SpinnerComponent } from "../../ui/spinner";
 
 const ReservationsPage: NextPage = () => {
   const [reservations, setReservations] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const updateReservations = async (
+    id: number,
+    status: "ACCEPTED" | "REJECTED"
+  ) => {
+    setIsLoading(true);
+    await fetchData(
+      `/reservations/${id}` as any,
+      {
+        status: status,
+      },
+      "",
+      "PATCH"
+    );
+    const reservationsRes = await fetchData("/reservations");
+    setReservations(reservationsRes.data);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const storeReservations = async () => {
@@ -24,7 +44,15 @@ const ReservationsPage: NextPage = () => {
           Here update status of your reservations and decline them
         </p>
         <div className="">
-          <ReservationsTableComponent data={reservations} />
+          {isLoading ? (
+            <SpinnerComponent />
+          ) : (
+            <ReservationsTableComponent
+              onApproveClick={(id) => updateReservations(id, "ACCEPTED")}
+              onDeclineClick={(id) => updateReservations(id, "REJECTED")}
+              data={reservations}
+            />
+          )}
         </div>
       </div>
     </MasterLayoutComponent>

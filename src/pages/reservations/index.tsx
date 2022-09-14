@@ -1,14 +1,17 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { fetchData } from "../../api/booking-service";
+import { PermissionLevel } from "../../configs/navigation";
 
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { ReservationsTableComponent } from "../../ui/reservations-table";
 import { SpinnerComponent } from "../../ui/spinner";
+import { AppContext } from "../_app";
 
 const ReservationsPage: NextPage = () => {
   const [reservations, setReservations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { appState } = useContext(AppContext);
 
   const updateReservations = async (
     id: number,
@@ -23,17 +26,24 @@ const ReservationsPage: NextPage = () => {
       "",
       "PATCH"
     );
-    const reservationsRes = await fetchData("/reservations");
-    setReservations(reservationsRes.data);
+    await storeReservations();
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    const storeReservations = async () => {
-      const reservationsRes = await fetchData("/reservations");
-      setReservations(reservationsRes.data);
-    };
+  const storeReservations = async () => {
+    let reservationsRes;
+    if (
+      appState.userLevel === PermissionLevel.ADMIN ||
+      appState.userLevel === PermissionLevel.RECEPTIONIST
+    ) {
+      reservationsRes = await fetchData("/reservations" as any);
+    } else {
+      reservationsRes = await fetchData("/me/reservations" as any);
+    }
+    setReservations(reservationsRes.data);
+  };
 
+  useEffect(() => {
     storeReservations();
   }, []);
   return (

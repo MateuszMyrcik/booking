@@ -38,7 +38,9 @@ const Login: NextPage = () => {
     } else {
       setError(null);
 
-      const user = await fetchData(`/users/${username}` as any);
+      localStorage.setItem("access_token", authToken.data.access_token);
+
+      const user = await fetchData("/me");
       const data = user.data as IUserData;
 
       appDispatch({

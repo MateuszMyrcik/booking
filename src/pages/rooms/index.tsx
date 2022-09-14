@@ -15,6 +15,7 @@ const FormInputs: any = [
   { id: "description", label: "Description", type: "text" },
   { id: "image", label: "Image", type: "url" },
   { id: "pricePerNight", label: "Price per night", type: "number" },
+  { id: "roomSize", label: "Rooms size (m2)", type: "number" },
 
   { id: "isBalcony", label: "Is balcony", type: "checkbox" },
   { id: "isOutstandingView", label: "Is out standing view", type: "checkbox" },
@@ -50,10 +51,16 @@ const RoomsPage: NextPage = () => {
         value: Number(roomData.pricePerNight as any),
         currency: "EUR",
       },
+      roomSize: {
+        unit: "m2",
+        value: Number(roomData.roomSize),
+      },
       noPeople: Number(roomData.noPeople),
+      status: "ACTIVE",
     };
 
     await fetchData("/rooms", mappedData, "", "POST");
+
     await fetchRooms();
   };
 

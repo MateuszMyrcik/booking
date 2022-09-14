@@ -1,35 +1,12 @@
 import type { NextPage } from "next";
-import { useContext, useEffect, useState } from "react";
-import { ButtonComponent } from "../ui/button";
+
 import { MasterLayoutComponent } from "../ui/master-layout";
 import { GoTo, SiteRoutes } from "../utils/goto";
-import { AppContext } from "./_app";
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
 const Home: NextPage = () => {
-  const { appDispatch, appState } = useContext(AppContext);
-  let [movies, setMovies] = useState([]);
-
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: null,
-      key: "selection",
-    },
-  ]);
-
-  useEffect(() => {
-    fetch("/api/movies")
-      .then((res) => res.json())
-      .then((json) => {
-        setMovies(json.movies);
-      });
-  }, []);
-
-  console.log(movies);
-
   return (
     <MasterLayoutComponent>
       <section className="bg-gray-100">

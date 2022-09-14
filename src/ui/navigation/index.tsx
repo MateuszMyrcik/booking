@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/router";
 import * as React from "react";
 import { INavigationItem, PermissionLevel } from "../../configs/navigation";
 import { AppContext } from "../../pages/_app";
@@ -12,6 +13,7 @@ interface INavigationComponent {
 
 export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
   const { appState, appDispatch } = React.useContext(AppContext);
+  const router = useRouter();
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white z-10">
@@ -69,6 +71,7 @@ export const Navigation: React.FC<INavigationComponent> = ({ items }) => {
                         type: AppActionType.SET_USER_LEVEL,
                         payload: PermissionLevel.GUEST,
                       });
+                      router.push(SiteRoutes.LOGIN);
                     }}
                     className="block p-2.5 text-gray-600 bg-white rounded-lg hover:text-gray-700 shrink-0 shadow-sm"
                   >

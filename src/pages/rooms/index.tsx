@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../api/booking-service";
+import { IRoom } from "../../api/booking-service/types";
 
 import { FormDialogComponent, IFormInput } from "../../ui/form-dialog";
 
@@ -42,27 +43,37 @@ const RoomsPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const saveRoom = async (roomData: any) => {
-    const mappedData = { ...roomData, images: [{ uri: roomData.image }] };
-    setIsLoading(true);
+    const mappedData: IRoom = {
+      ...roomData,
+      images: [{ uri: (roomData as any).image }],
+      pricePerNight: {
+        value: Number(roomData.pricePerNight as any),
+        currency: "EUR",
+      },
+      noPeople: Number(roomData.noPeople),
+    };
+
     await fetchData("/rooms", mappedData, "", "POST");
-    const roomRes = await fetchData("/rooms");
+    await fetchRooms();
+  };
+
+  const fetchRooms = async () => {
+    const roomRes = await fetchData("/rooms", {}, { pageSize: 100 });
+
     setRooms(roomRes.data);
-    setIsLoading(false);
   };
 
   const onDelete = async (id: string) => {
     setIsLoading(true);
     await fetchData(`/rooms/${id}` as any, {}, "", "DELETE");
-    const roomRes = await fetchData("/rooms");
-    setRooms(roomRes.data);
+    await fetchRooms();
     setIsLoading(false);
   };
 
   useEffect(() => {
     const storeReservations = async () => {
       setIsLoading(true);
-      const roomRes = await fetchData("/rooms");
-      setRooms(roomRes.data);
+      await fetchRooms();
       setIsLoading(false);
     };
 

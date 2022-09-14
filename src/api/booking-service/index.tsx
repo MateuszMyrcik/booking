@@ -15,7 +15,7 @@ type IFetchMethod = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
 const fetchData = async (
   path: IApiPath,
   body?: any,
-  query: any = "",
+  query: Record<string, string | number> | string = "",
   method: IFetchMethod = "GET"
   // sort: string = "ASC"
 ) => {

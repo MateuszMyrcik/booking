@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -29,8 +30,11 @@ export interface IRoomPage {
 export type FormValues = IRoom;
 
 const RoomPage: NextPage<IRoomPage> = ({ room: roomRes }) => {
+  const router = useRouter();
   const defaultValues = {
     ...roomRes,
+    image: (roomRes.images as any)[0].uri,
+    pricePerNight: roomRes.pricePerNight.value as any,
   };
   const [room, setRoom] = useState({});
   const { handleSubmit, control } = useForm<FormValues>({
@@ -46,13 +50,15 @@ const RoomPage: NextPage<IRoomPage> = ({ room: roomRes }) => {
         currency: "EUR",
       },
     };
-    console.log(mappedData);
+
     const result = await fetchData(
       `/rooms/${roomRes.roomNo}` as any,
       mappedData,
       "",
       "PUT"
     );
+
+    router.push(SiteRoutes.ROOMS);
   };
 
   return (

@@ -11,7 +11,7 @@ export const CardsComponent: React.FC<ICardsComponent> = ({ room }) => {
     <div className="block p-4 rounded-lg shadow-sm shadow-indigo-100">
       <img
         alt="123 Wallaby Avenue, Park Road"
-        src={room.images[1].uri}
+        src={room.images[1] ? room.images[1].uri : room.images[0].uri}
         className="object-cover w-full h-56 rounded-md"
       />
 

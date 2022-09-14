@@ -53,7 +53,10 @@ const ReserveRoomsPage: NextPage = () => {
 
   const filterData = async (params: any) => {
     setIsLoading(true);
-    const filteredRooms = await fetchData("/rooms", "", params);
+    const filteredRooms = await fetchData("/rooms", "", {
+      ...params,
+      pageSize: 100,
+    });
     setRooms(filteredRooms.data);
     setIsLoading(false);
   };
@@ -72,7 +75,7 @@ const ReserveRoomsPage: NextPage = () => {
   useEffect(() => {
     const getRooms = async () => {
       setIsLoading(true);
-      const rooms = await fetchData("/rooms");
+      const rooms = await fetchData("/rooms", {}, { pageSize: 100 });
       setRooms(rooms.data);
       setIsLoading(false);
     };

@@ -26,7 +26,7 @@ export interface IState {
     phoneNumber: string;
   };
   room?: IRoomData;
-  reservation?: IReservation;
+  reservation?: IReservation & { value: number; currency: string };
   token?: string;
 }
 

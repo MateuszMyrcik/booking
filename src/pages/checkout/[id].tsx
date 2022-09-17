@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { fetchData } from "../../api/booking-service";
 import { IRoomData } from "../../api/booking-service/types";
 import { ButtonComponent } from "../../ui/button";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { GoTo, SiteRoutes } from "../../utils/goto";
 import { AppContext } from "../_app";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -14,6 +15,7 @@ import { useRouter } from "next/router";
 import { differenceInCalendarDays } from "date-fns";
 import { AppActionType } from "../../state/reducers";
 import { SpinnerComponent } from "../../ui/spinner";
+import { Carousel } from "react-responsive-carousel";
 
 export async function getServerSideProps(context: any) {
   return {
@@ -45,10 +47,9 @@ const Checkout: NextPage<ICheckoutPage> = ({ id }) => {
     e.preventDefault();
 
     const reservation = await fetchData(
-      "/reservations",
+      "/me/reservations" as any,
       {
         roomNo: room.roomNo,
-        username: appState.user?.username,
         noPeople: room.noPeople,
         dateRange: {
           from: dateRange[0],
@@ -65,9 +66,11 @@ const Checkout: NextPage<ICheckoutPage> = ({ id }) => {
       setTransactionErr("");
       appDispatch({
         type: AppActionType.SET_RESERVATION,
-        payload: { ...reservation.data },
+        payload: {
+          ...reservation.data,
+        },
       });
-      router.push(SiteRoutes.SUMMARY);
+      router.push(`${SiteRoutes.SUMMARY}/${reservation.data.id}`);
     }
   };
 
@@ -103,136 +106,149 @@ const Checkout: NextPage<ICheckoutPage> = ({ id }) => {
             <SpinnerComponent />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="py-12 bg-gray-50 md:py-24">
+              <div className="py-4 bg-gray-50">
                 <div className="max-w-lg px-4 mx-auto lg:px-8">
-                  <div className="mt-8">
-                    <p className="text-2xl font-medium tracking-tight">
-                      ${room.pricePerNight.value}
-                    </p>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Prize for the night
-                    </p>
-                    {totalPrize > 0 && (
-                      <>
-                        <p className="mt-1 text-2xl font-medium tracking-tight">
-                          ${totalPrize}
-                        </p>
-                        <p className="mt-1 text-sm text-green-500">
-                          Total prize
-                        </p>
-                      </>
-                    )}
-                  </div>
-
                   <div className="mt-12">
                     <div className="flow-root">
-                      <ul className="-my-4 divide-y divide-gray-200">
-                        <li className="flex items-center justify-between py-4">
-                          <div className="flex items-start">
-                            <img
+                      <div className="flex gap-8">
+                        <ul className="my-4 divide-y divide-gray-200 mx-0">
+                          <li className="flex items-center justify-between py-4">
+                            <div className="flex items-start">
+                              {/* <img
                               className="flex-shrink-0 object-cover w-16 h-16 rounded-lg"
                               src={room.images[1].uri}
                               alt=""
-                            />
+                            /> */}
 
-                            <div className="ml-4">
-                              <p className="text-sm">{room.description}</p>
+                              <div className="">
+                                <p className="text-sm">{room.description}</p>
 
-                              <dl className="mt-1 space-y-1 text-xs text-gray-500">
-                                <div>
-                                  <dt className="inline">Bathroom type:</dt>
-                                  <dd className="ml-1 inline">
-                                    {room.bathroomType}
-                                  </dd>
-                                </div>
+                                <dl className="mt-1 space-y-1 text-xs text-gray-500">
+                                  <div>
+                                    <dt className="inline">Bathroom type:</dt>
+                                    <dd className="ml-1 inline">
+                                      {room.bathroomType}
+                                    </dd>
+                                  </div>
 
-                                <div>
-                                  <dt className="inline">Is balcony:</dt>
-                                  <dd className="inline">
-                                    {room.isBalcony ? (
-                                      <div className="ml-2 inline text-green-500">
-                                        Yes
-                                      </div>
-                                    ) : (
-                                      <div className="ml-2 inline text-red-500">
-                                        No
-                                      </div>
-                                    )}
-                                  </dd>
-                                </div>
+                                  <div>
+                                    <dt className="inline">Is balcony:</dt>
+                                    <dd className="inline">
+                                      {room.isBalcony ? (
+                                        <div className="ml-2 inline text-green-500">
+                                          Yes
+                                        </div>
+                                      ) : (
+                                        <div className="ml-2 inline text-red-500">
+                                          No
+                                        </div>
+                                      )}
+                                    </dd>
+                                  </div>
 
-                                <div>
-                                  <dt className="inline">Is coffee machine:</dt>
-                                  <dd className="inline">
-                                    {room.isCoffeeMachine ? (
-                                      <div className="ml-2 inline text-green-500">
-                                        Yes
-                                      </div>
-                                    ) : (
-                                      <div className="ml-2 inline text-red-500">
-                                        No
-                                      </div>
-                                    )}
-                                  </dd>
-                                </div>
+                                  <div>
+                                    <dt className="inline">
+                                      Is coffee machine:
+                                    </dt>
+                                    <dd className="inline">
+                                      {room.isCoffeeMachine ? (
+                                        <div className="ml-2 inline text-green-500">
+                                          Yes
+                                        </div>
+                                      ) : (
+                                        <div className="ml-2 inline text-red-500">
+                                          No
+                                        </div>
+                                      )}
+                                    </dd>
+                                  </div>
 
-                                <div>
-                                  <dt className="inline">
-                                    Is outstanding view:
-                                  </dt>
-                                  <dd className="inline">
-                                    {room.isOutstandingView ? (
-                                      <div className="ml-2 inline text-green-500">
-                                        Yes
-                                      </div>
-                                    ) : (
-                                      <div className="ml-2 inline text-red-500">
-                                        No
-                                      </div>
-                                    )}
-                                  </dd>
-                                </div>
+                                  <div>
+                                    <dt className="inline">
+                                      Is outstanding view:
+                                    </dt>
+                                    <dd className="inline">
+                                      {room.isOutstandingView ? (
+                                        <div className="ml-2 inline text-green-500">
+                                          Yes
+                                        </div>
+                                      ) : (
+                                        <div className="ml-2 inline text-red-500">
+                                          No
+                                        </div>
+                                      )}
+                                    </dd>
+                                  </div>
 
-                                <div>
-                                  <dt className="inline">Is rest area:</dt>
-                                  <dd className="inline">
-                                    {room.isRestArea ? (
-                                      <div className="ml-2 inline text-green-500">
-                                        Yes
-                                      </div>
-                                    ) : (
-                                      <div className="ml-2 inline text-red-500">
-                                        No
-                                      </div>
-                                    )}
-                                  </dd>
-                                </div>
+                                  <div>
+                                    <dt className="inline">Is rest area:</dt>
+                                    <dd className="inline">
+                                      {room.isRestArea ? (
+                                        <div className="ml-2 inline text-green-500">
+                                          Yes
+                                        </div>
+                                      ) : (
+                                        <div className="ml-2 inline text-red-500">
+                                          No
+                                        </div>
+                                      )}
+                                    </dd>
+                                  </div>
 
-                                <div>
-                                  <dt className="inline">Is TV:</dt>
-                                  <dd className="inline">
-                                    {room.isTv ? (
-                                      <div className="ml-2 inline text-green-500">
-                                        Yes
-                                      </div>
-                                    ) : (
-                                      <div className="ml-2 inline text-red-500">
-                                        No
-                                      </div>
-                                    )}
-                                  </dd>
-                                </div>
-                              </dl>
+                                  <div>
+                                    <dt className="inline">Is TV:</dt>
+                                    <dd className="inline">
+                                      {room.isTv ? (
+                                        <div className="ml-2 inline text-green-500">
+                                          Yes
+                                        </div>
+                                      ) : (
+                                        <div className="ml-2 inline text-red-500">
+                                          No
+                                        </div>
+                                      )}
+                                    </dd>
+                                  </div>
+                                </dl>
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                      </ul>
+                          </li>
+                        </ul>
+                        <div className="mt-8">
+                          <p className="text-2xl font-medium tracking-tight">
+                            ${room.pricePerNight.value}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">
+                            Prize for the night
+                          </p>
+                          {totalPrize > 0 && (
+                            <>
+                              <p className="mt-2 text-2xl font-medium tracking-tight">
+                                ${totalPrize}
+                              </p>
+                              <p className="mt-1 text-sm text-green-500">
+                                Total prize
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Carousel>
+                          {room.images.map((image, index) => (
+                            <div key={index}>
+                              <img src={image.uri} />
+                            </div>
+                          ))}
+                        </Carousel>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="py-12 bg-white md:py-24">
+              <div className="py-4 bg-white md:py-24">
                 {appState.user ? (
                   <div className="max-w-lg px-4 mx-auto lg:px-8">
                     <form

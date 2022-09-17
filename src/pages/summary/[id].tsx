@@ -1,18 +1,54 @@
 import type { NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MasterLayoutComponent } from "../../ui/master-layout";
 import { useRouter } from "next/router";
 import { SiteRoutes } from "../../utils/goto";
 import { ButtonComponent } from "../../ui/button";
 import { AppContext } from "../_app";
 import { fetchData } from "../../api/booking-service";
+import { IReservation } from "../../api/booking-service/types";
+import { SpinnerComponent } from "../../ui/spinner";
 
-const Summary: NextPage = () => {
+export async function getServerSideProps(context: any) {
+  return {
+    props: {
+      id: context.query.id,
+    },
+  };
+}
+
+export interface ISummaryPage {
+  id: string;
+}
+
+const Summary: NextPage<ISummaryPage> = ({ id }) => {
   const [BLIKCode, setBLIKCode] = useState("");
   const [error, setError] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const router = useRouter();
   const { appState } = useContext(AppContext);
+  const [reservation, setReservation] = useState({} as IReservation);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getReservation = async () => {
+      setIsLoading(true);
+      const reservationRes = await fetchData(`/me/reservations/${id}` as any);
+
+      debugger;
+
+      setReservation(reservationRes.data);
+      setIsLoading(false);
+    };
+
+    getReservation();
+  }, [id]);
+
+  if (isLoading) {
+    <MasterLayoutComponent>
+      <SpinnerComponent />
+    </MasterLayoutComponent>;
+  }
 
   return (
     <MasterLayoutComponent>
@@ -28,10 +64,15 @@ const Summary: NextPage = () => {
                   setError(true);
                 } else {
                   fetchData(
-                    `/reservations/${appState.reservation?.id}` as any,
-                    { status: "PAID" },
+                    `/me/reservations/${reservation.id}/payment` as any,
+                    {
+                      payment: {
+                        value: reservation.totalCost.value,
+                        currency: reservation.totalCost.currency,
+                      },
+                    },
                     "",
-                    "PATCH"
+                    "POST"
                   );
                   setError(false);
                   setIsVerified(true);
@@ -43,6 +84,10 @@ const Summary: NextPage = () => {
                 htmlFor="blik"
               >
                 Enter the blik code just received from the bank
+                <p className="max-w-md mx-auto mt-4 text-left text-gray-500 text-center">
+                  <div>Enter bellow code to pass process:</div>
+                  <div className="italic ">11111111</div>
+                </p>
               </label>
 
               <input
@@ -55,7 +100,6 @@ const Summary: NextPage = () => {
                   setBLIKCode(e.target.value);
                 }}
               />
-
               <button
                 className="rounded-lg bg-black text-sm p-2.5 text-white w-full block"
                 type="submit"

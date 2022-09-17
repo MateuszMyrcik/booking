@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import { IReservation, IUserData } from "../../api/booking-service/types";
 import { PermissionLevel } from "../../configs/navigation";
 import { AppContext } from "../../pages/_app";
+import { SiteRoutes } from "../../utils/goto";
 
 interface ITableComponent {
   data: IReservation[];
@@ -16,6 +18,7 @@ export const ReservationsTableComponent: React.FC<ITableComponent> = ({
   onApproveClick,
 }) => {
   const { appState } = useContext(AppContext);
+  const router = useRouter();
 
   const getStatusColor = (status: IReservation["status"]) => {
     switch (status) {
@@ -86,6 +89,16 @@ export const ReservationsTableComponent: React.FC<ITableComponent> = ({
                 >
                   {reservation.status}
                 </strong>
+                {reservation.status === "PENDING" && (
+                  <button
+                    onClick={() => {
+                      router.push(`${SiteRoutes.SUMMARY}/${reservation.id}`);
+                    }}
+                    className="m-2 underline hover:text-blue-500 block"
+                  >
+                    Pay for reservation
+                  </button>
+                )}
               </td>
               <td className="p-4 text-gray-700 whitespace-nowrap">
                 {reservation.id}
